@@ -30,10 +30,24 @@ dependencies {
     implementation 'org.apache.commons:commons-compress:1.26.2'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.jboss.narayana.jta:narayana-jta:7.3.4.Final'
     testImplementation 'com.mysql:mysql-connector-j:9.1.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
     maxParallelForks = 3
     useJUnitPlatform()
+}
+
+tasks.register('step5Test', Test) {
+    description = '로컬 트랜잭션, 트랜잭션 관리자 추상화와 JTA/XA를 비교한다.'
+    group = 'verification'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'transaction.stage5.*'
+    }
+    maxParallelForks = 1
 }
